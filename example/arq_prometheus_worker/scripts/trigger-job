@@ -1,0 +1,2 @@
+#!/bin/sh -e
+python example/arq_prometheus_worker/worker.py

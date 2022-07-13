@@ -1,0 +1,2 @@
+#!/bin/sh -e
+arq example.arq_prometheus_worker.worker.WorkerSettings
