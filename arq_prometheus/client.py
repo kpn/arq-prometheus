@@ -27,7 +27,7 @@ class ArqPrometheusMetrics:
 
     `ArqPrometheusMetrics` uses the redis provided by the arq ctx.
 
-    ```
+    ```python
     async def startup(ctx):
         arq_prometheus = ArqPrometheusMetrics(
             ctx, delay=delay, enable_webserver=True

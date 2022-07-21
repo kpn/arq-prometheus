@@ -1,5 +1,12 @@
 # Arq-prometheus
 
+![Build status](https://github.com/kpn/arq-prometheus/actions/workflows/test.yaml/badge.svg?branch=master)
+[![PyPI Package latest release](https://img.shields.io/pypi/v/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
+[![PyPI Package download count (per month)](https://img.shields.io/pypi/dm/arq-prometheus?style=flat-square)](https://pypi.org/project/arq-prometheus/)
+[![Supported versions](https://img.shields.io/pypi/pyversions/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
+[![Codecov](https://img.shields.io/codecov/c/github/kpn/arq-prometheus.svg?style=flat-square)](https://codecov.io/gh/kpn/arq-prometheus)
+
+
 Prometheus metrics for [arq](https://github.com/samuelcolvin/arq)
 
 ## Installation
@@ -39,9 +46,7 @@ also have to provide them to `ArqPrometheusMetrics`.
 from arq_prometheus import ArqPrometheusMetrics
 
 async def startup(ctx):
-    arq_prometheus = ArqPrometheusMetrics(
-        ctx, delay=delay, enable_webserver=True
-    )
+    arq_prometheus = ArqPrometheusMetrics(ctx, delay=delay)
     ctx["arq_prometheus"] = await arq_prometheus.start()
 
 async def shutdown(ctx):
@@ -55,9 +60,26 @@ class WorkerSettings:
 
 ````
 
-Start your arq worker:
+Start your arq worker,
 
 ```sh
 arq example_worker.WorkerSettings
 ```
 
+Make request to `localhost:8081` (or open in browser).
+
+```sh
+curl localhost:8081
+```
+
+
+## Arguments
+
+- `ctx: dict`: arq context
+- `queue_name: str = default_queue_name`: name of the arq queue
+- `health_check_key: Optional[str] = None`: arq health key
+- `delay: datetime.timedelta = datetime.timedelta(seconds=5)`: a datetime.timedelta
+- `enable_webserver: bool = True`: set to True if you want a web server exposing the metrics
+- `addr: str = "0.0.0.0"`: webserver address
+- `port: int = 8081`: webserver port
+- `registry: prom.CollectorRegistry = prom.REGISTRY`: the prometheus registry, usually you do not have to override this
