@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-pytest -s --cov-report term-missing --cov=arq_prometheus tests
+pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
 black arq_prometheus tests --check
 isort --check-only arq_prometheus tests
 flake8 arq_prometheus/ tests/
