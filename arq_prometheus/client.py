@@ -27,7 +27,7 @@ class ArqPrometheusMetrics:
 
     `ArqPrometheusMetrics` uses the redis provided by the arq ctx.
 
-    ```python
+    ```
     async def startup(ctx):
         arq_prometheus = ArqPrometheusMetrics(
             ctx, delay=delay, enable_webserver=True
@@ -122,6 +122,7 @@ class ArqPrometheusMetrics:
         )
 
     async def start(self):
+        """Initialize loop and maybe webserver."""
         logger.info("[arq_prometheus] Initializing prometheus...")
         logger.debug(f"[arq_prometheus] `queue_name`: '{self.queue_name}'")
         logger.debug(f"[arq_prometheus] `health_check_key`: '{self.health_check_key}'")
@@ -135,6 +136,7 @@ class ArqPrometheusMetrics:
         return self
 
     async def stop(self):
+        """Terminate the metrics task"""
         logger.info("[arq_prometheus] Stopping prometheus...")
         if self._metrics_task is not None:
             self._metrics_task.cancel()
@@ -169,6 +171,7 @@ class ArqPrometheusMetrics:
             )
 
     def parse(self, results: str) -> Optional[Dict[str, int]]:
+        """Read health check and return a parsed dict."""
         parsed = self.health_prog.search(results)
         if parsed is None:
             return None

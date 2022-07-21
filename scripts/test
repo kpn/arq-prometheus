@@ -1,7 +1,11 @@
 #!/bin/sh -e
 
-pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
-black arq_prometheus tests --check
-isort --check-only arq_prometheus tests
-flake8 arq_prometheus/ tests/
-mypy arq_prometheus/ tests/
+export PREFIX="poetry run python -m "
+if [ -d '.venv' ] ; then
+    export PREFIX="venv/bin/"
+fi
+${PREFIX}pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
+${PREFIX}black arq_prometheus tests --check
+${PREFIX}isort --check-only arq_prometheus tests
+${PREFIX}flake8 arq_prometheus/ tests/
+${PREFIX}mypy arq_prometheus/ tests/
