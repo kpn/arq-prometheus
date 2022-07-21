@@ -26,6 +26,7 @@ ipython = "^8.4.0"
 isort = "^5.10.1"
 flake9 = "^3.8.3"
 commitizen = "^2.28.0"
+pytest-cov = "^3.0.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
@@ -41,3 +42,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.flake8]
 max-line-length = 88
+
+[tool.isort]
+profile = "black"
+known_first_party = ["arq_prometheus", "tests"]

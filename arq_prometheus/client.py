@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import logging
 import re
-from typing import Optional
+from typing import Dict, Optional
 
 import prometheus_client as prom
 from arq.connections import ArqRedis
@@ -111,7 +111,7 @@ class ArqPrometheusMetrics:
         )
 
         self.jobs_ongoing = prom.Gauge(
-            "arq_ongoing_jobs",
+            "arq_jobs_ongoing",
             "The number of jobs in progress.",
             registry=registry,
         )
@@ -150,7 +150,6 @@ class ArqPrometheusMetrics:
 
             redis = self.ctx["redis"]
             results = await read_health_check_key(redis, self.health_check_key)
-
             if results is None:
                 logger.warn(
                     "[arq_prometheus] Health key could not be read, value is `None`.\n"
@@ -161,10 +160,19 @@ class ArqPrometheusMetrics:
                 )
                 continue
             logger.debug(f"[arq_prometheus] {results}")
-            results = self.health_prog.search(results)
+            await self.parse(results)
+
             if results is not None:
                 results = results.groupdict()
-                self.generate_metrics(results)
+                await asyncio.get_event_loop().run_in_executor(
+                    None, self.generate_metrics, results
+                )
+
+    def parse(self, results: str) -> Optional[Dict[str, int]]:
+        parsed = self.health_prog.search(results)
+        if parsed is None:
+            return None
+        return {key: int(value) for key, value in parsed.groupdict().items()}
 
     async def start_metrics_task(self) -> None:
         logger.debug("[arq_prometheus] Starting metrics task...")

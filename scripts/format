@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+isort arq_prometheus/ tests/
+black arq_prometheus/ tests/
