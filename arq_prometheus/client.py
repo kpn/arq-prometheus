@@ -7,7 +7,6 @@ from typing import Dict, Optional
 import prometheus_client as prom
 from arq.connections import ArqRedis
 from arq.constants import default_queue_name, health_check_key_suffix
-from prometheus_client import REGISTRY, start_wsgi_server
 
 logger = logging.getLogger("arq.prometheus")
 
@@ -54,10 +53,10 @@ class ArqPrometheusMetrics:
         queue_name: str = default_queue_name,
         health_check_key: Optional[str] = None,
         delay: datetime.timedelta = datetime.timedelta(seconds=5),
-        enable_webserver: bool = False,
+        enable_webserver: bool = True,
         addr: str = "0.0.0.0",
         port: int = 8081,
-        registry: prom.CollectorRegistry = REGISTRY,
+        registry: prom.CollectorRegistry = prom.REGISTRY,
     ):
         """
         Args:
@@ -145,13 +144,13 @@ class ArqPrometheusMetrics:
         while True:
             # Sleep first to let worker initialize itself.
             await asyncio.sleep(self.delay)
-
             logger.debug(f"[arq_prometheus] Gathering metrics (interval {self.delay}s)")
 
             redis = self.ctx["redis"]
             results = await read_health_check_key(redis, self.health_check_key)
+
             if results is None:
-                logger.warn(
+                logger.warning(
                     "[arq_prometheus] Health key could not be read, value is `None`.\n"
                     "Possible causes:\n"
                     "- health key has not been initialized by the worker yet\n"
@@ -160,13 +159,14 @@ class ArqPrometheusMetrics:
                 )
                 continue
             logger.debug(f"[arq_prometheus] {results}")
-            await self.parse(results)
+            parsed = self.parse(results)
+            if parsed is None:
+                logger.warning("[arq_prometheus] unexpected health check result")
+                continue
 
-            if results is not None:
-                results = results.groupdict()
-                await asyncio.get_event_loop().run_in_executor(
-                    None, self.generate_metrics, results
-                )
+            await asyncio.get_event_loop().run_in_executor(
+                None, self.generate_metrics, parsed
+            )
 
     def parse(self, results: str) -> Optional[Dict[str, int]]:
         parsed = self.health_prog.search(results)
@@ -195,5 +195,5 @@ class ArqPrometheusMetrics:
 
     def start_webserver(self) -> None:
         """Start web server in a different thread."""
-        start_wsgi_server(self.port, addr=self.addr, registry=self.registry)
+        prom.start_wsgi_server(self.port, addr=self.addr, registry=self.registry)
         logger.info(f"[arq_prometheus] Running at: http://{self.addr}:{self.port}/")

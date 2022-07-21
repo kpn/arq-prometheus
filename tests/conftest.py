@@ -11,4 +11,4 @@ def registry():
 
 @pytest.fixture
 def arq_prom_instance(registry):
-    return ArqPrometheusMetrics(ctx={}, registry=registry)
+    return ArqPrometheusMetrics(ctx={}, registry=registry, enable_webserver=False)
