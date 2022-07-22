@@ -1,7 +1,13 @@
 #!/bin/sh -e
 
-pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
-black arq_prometheus tests --check
-isort --check-only arq_prometheus tests
-flake8 arq_prometheus/ tests/
-mypy arq_prometheus/ tests/
+pr() {
+    poetry run python -m "$@"
+}
+
+cat pyproject.toml
+
+pr pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
+pr black arq_prometheus tests --check
+pr isort --check-only arq_prometheus tests
+pr pflake8 arq_prometheus/ tests/
+pr mypy arq_prometheus/ tests/
