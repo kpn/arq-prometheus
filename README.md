@@ -1,6 +1,6 @@
 # Arq-prometheus
 
-![Build status](https://github.com/kpn/arq-prometheus/actions/workflows/test.yaml/badge.svg?branch=master)
+![Build status](https://github.com/kpn/arq-prometheus/actions/workflows/test.yaml/badge.svg)
 [![PyPI Package latest release](https://img.shields.io/pypi/v/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
 [![PyPI Package download count (per month)](https://img.shields.io/pypi/dm/arq-prometheus?style=flat-square)](https://pypi.org/project/arq-prometheus/)
 [![Supported versions](https://img.shields.io/pypi/pyversions/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
@@ -9,13 +9,17 @@
 
 Prometheus metrics for [arq](https://github.com/samuelcolvin/arq)
 
+⚠️ WARNING! This is a project in alpha phase ⚠️
+
 ## Installation
+
+[Pip](https://pip.pypa.io/en/stable/)
 
 ```sh
 pip install -U arq-prometheus
 ```
 
-Alternatively
+[Poetry](https://python-poetry.org/)
 
 ```sh
 poetry add arq-prometheus
@@ -23,7 +27,7 @@ poetry add arq-prometheus
 
 ## Description
 
-This is an alpha release. The metrics exposed are the same as the health check.
+The metrics exposed are the same as the health check.
 
 | Metric name             | Description                      |
 | ----------------------- | -------------------------------- |

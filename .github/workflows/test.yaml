@@ -26,11 +26,11 @@ jobs:
       uses: snok/install-poetry@v1
       with:
         version: latest
-        virtualenvs-in-project: false
-        virtualenvs-create: false
+        virtualenvs-in-project: true
+        virtualenvs-create: true
     - name: Install Dependencies
       run: |
-        poetry install
+        poetry install --no-interaction
     - name: Test and Lint
       run: |
         ./scripts/test
