@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "arq-prometheus"
-version = "0.2.1"
+version = "0.2.2"
 description = "Prometheus metrics for arq job queues"
 authors = ["Santiago Fraire Willemoes <santiago.fraire@kpn.com>"]
 classifiers = [
@@ -32,7 +32,7 @@ Flake8-pyproject = "^1.1.0"
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.1"
+version = "0.2.2"
 version_files = [
   "pyproject.toml:version",
   "arq_prometheus/__init__.py:__version__",
