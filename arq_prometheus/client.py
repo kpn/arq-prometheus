@@ -2,7 +2,7 @@ import asyncio
 import datetime
 import logging
 import re
-from typing import Dict, Optional
+from typing import Dict, Optional, Union
 
 import prometheus_client as prom
 from arq.connections import ArqRedis
@@ -15,7 +15,11 @@ async def read_health_check_key(
     redis: ArqRedis,
     health_check_key: str,
 ) -> Optional[str]:
-    data: Optional[str] = await redis.get(health_check_key)
+
+    data: Optional[Union[str, bytes]] = await redis.get(health_check_key)
+    # redis client may return str or bytes
+    if isinstance(data, bytes):
+        data = data.decode()
     return data
 
 
