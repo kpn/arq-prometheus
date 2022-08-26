@@ -1,9 +1,9 @@
 # Arq-prometheus
 
 ![Build status](https://github.com/kpn/arq-prometheus/actions/workflows/test.yaml/badge.svg)
-[![PyPI Package latest release](https://img.shields.io/pypi/v/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
+[![PyPI Package latest release](https://img.shields.io/pypi/v/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/arq-prometheus/)
 [![PyPI Package download count (per month)](https://img.shields.io/pypi/dm/arq-prometheus?style=flat-square)](https://pypi.org/project/arq-prometheus/)
-[![Supported versions](https://img.shields.io/pypi/pyversions/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/commitizen/)
+[![Supported versions](https://img.shields.io/pypi/pyversions/arq-prometheus.svg?style=flat-square)](https://pypi.org/project/arq-prometheus/)
 [![Codecov](https://img.shields.io/codecov/c/github/kpn/arq-prometheus.svg?style=flat-square)](https://codecov.io/gh/kpn/arq-prometheus)
 
 
