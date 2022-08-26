@@ -16,7 +16,7 @@ keywords = ["arq", "prometheus", "metrics"]
 [tool.poetry.dependencies]
 python = "^3.8"
 prometheus-client = "^0.14.1"
-arq = "^0.22"
+arq = "^0.23"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1"

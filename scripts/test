@@ -4,8 +4,6 @@ pr() {
     poetry run python -m "$@"
 }
 
-cat pyproject.toml
-
 pr pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
 pr black arq_prometheus tests --check
 pr isort --check-only arq_prometheus tests
