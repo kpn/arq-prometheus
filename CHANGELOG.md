@@ -1,3 +1,9 @@
+## 0.3.0 (2023-04-19)
+
+### Feat
+
+- relax required versions of arq and prometheus-client (#5)
+
 ## 0.2.3 (2022-08-26)
 
 ### Fix
