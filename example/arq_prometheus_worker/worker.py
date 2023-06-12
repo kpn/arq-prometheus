@@ -4,6 +4,7 @@ import datetime
 from aiohttp import ClientSession
 from arq import create_pool
 from arq.connections import RedisSettings
+from arq.worker import Worker
 from arq_prometheus import ArqPrometheusMetrics
 
 
@@ -11,11 +12,8 @@ async def download_content(ctx, url):
     session: ClientSession = ctx["session"]
     async with session.get(url) as response:
         content = await response.text()
-        print(f"{url}: {content:.80}...")
+        print(f"{url}: {content[:80]}...")
     return len(content)
-
-
-delay = datetime.timedelta(seconds=5)
 
 
 async def startup(ctx):
@@ -35,16 +33,15 @@ async def main():
         await redis.enqueue_job("download_content", url)
 
 
-# WorkerSettings defines the settings to use when creating the work,
+# WorkerSettings defines the settings to use when creating the worker,
 # it's used by the arq cli.
 # For a list of available settings,
 # see https://arq-docs.helpmanual.io/#arq.worker.Worker
-class WorkerSettings:
-    functions = [download_content]
-    on_startup = startup
-    on_shutdown = shutdown
-    health_check_interval = delay.total_seconds()
+class CustomWorker(Worker):
+    def __init__(self):
+        super().__init__(functions=[download_content], on_startup=startup, on_shutdown=shutdown, health_check_interval=delay.total_seconds())
 
 
 if __name__ == "__main__":
+    delay = datetime.timedelta(seconds=5)
     asyncio.run(main())
