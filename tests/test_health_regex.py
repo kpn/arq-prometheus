@@ -37,5 +37,5 @@ TEST_CASES = [
 
 
 @pytest.mark.parametrize("result, parseddict", TEST_CASES)
-def test_regex_results(result, parseddict, arq_prom_instance):
+def test_parse_method_with_regex_results(result, parseddict, arq_prom_instance):
     assert arq_prom_instance.parse(result) == parseddict
