@@ -1,11 +1,19 @@
 #!/bin/sh -e
 
-pr() {
+run_poetry() {
     poetry run python -m "$@"
 }
 
-pr pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
-pr black arq_prometheus tests --check
-pr isort --check-only arq_prometheus tests
-pr flake8 arq_prometheus/ tests/
-pr mypy arq_prometheus/ tests/
+run_tests() {
+    run_poetry pytest -s --cov-report term-missing --cov-report=xml:coverage.xml --cov=arq_prometheus "${1:-tests}"
+}
+
+run_linters() {
+    run_poetry black arq_prometheus tests --check
+    run_poetry isort --check-only arq_prometheus tests
+    run_poetry flake8 arq_prometheus/ tests/
+    run_poetry mypy arq_prometheus/ tests/
+}
+
+run_tests
+run_linters
