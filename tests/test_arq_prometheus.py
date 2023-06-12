@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 import urllib.request
-from typing import Any
 
 import pytest
 
@@ -9,11 +8,11 @@ from arq_prometheus.client import ArqPrometheusMetrics
 
 
 @pytest.fixture
-def futures_factory(result: Any = None):
-    """Produce futures with an explicit result, useful to mock async calls."""
+def futures_factory(result=None):
+    """Produce futures with an explicit result, useful for mocking async calls."""
 
-    def wrapper(result: Any):
-        f: asyncio.Future = asyncio.Future()
+    def wrapper(result):
+        f = asyncio.Future()
         f.set_result(result)
         return f
 
@@ -24,7 +23,7 @@ def futures_factory(result: Any = None):
 def aredis_mock(mocker, futures_factory):
     """Async mock"""
 
-    def wrapper(result: Any = None):
+    def wrapper(result=None):
         m = mocker.Mock()
         m.get.return_value = futures_factory(result)
         return m
@@ -34,8 +33,6 @@ def aredis_mock(mocker, futures_factory):
 
 @pytest.mark.asyncio
 async def test_client_called_once(registry, aredis_mock):
-
-    # Easy coroutine mock
     redis = aredis_mock()
 
     ctx = {"redis": redis}
@@ -54,8 +51,7 @@ async def test_client_called_once(registry, aredis_mock):
 
 @pytest.mark.asyncio
 async def test_client_called_some_times(registry, aredis_mock):
-    """Inside a second, it should be called aprox 5 times."""
-    # Easy coroutine mock
+    """Within a second, it should be called approximately 5 times."""
     redis = aredis_mock()
 
     ctx = {"redis": redis}
