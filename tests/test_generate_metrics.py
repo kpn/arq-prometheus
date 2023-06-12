@@ -27,25 +27,11 @@ METRICS_DATA = [
 
 @pytest.mark.parametrize("data", METRICS_DATA)
 def test_generate_metrics(data, arq_prom_instance):
-
     arq_prom_instance.generate_metrics(data)
+    registry = arq_prom_instance.registry
 
-    assert (
-        arq_prom_instance.registry.get_sample_value("arq_jobs_completed")
-        == data["completed"]
-    )
-    assert (
-        arq_prom_instance.registry.get_sample_value("arq_jobs_failed") == data["failed"]
-    )
-    assert (
-        arq_prom_instance.registry.get_sample_value("arq_jobs_retried")
-        == data["retried"]
-    )
-    assert (
-        arq_prom_instance.registry.get_sample_value("arq_jobs_ongoing")
-        == data["ongoing"]
-    )
-    assert (
-        arq_prom_instance.registry.get_sample_value("arq_queued_inprogress")
-        == data["queued"]
-    )
+    assert registry.get_sample_value("arq_jobs_completed") == data["completed"]
+    assert registry.get_sample_value("arq_jobs_failed") == data["failed"]
+    assert registry.get_sample_value("arq_jobs_retried") == data["retried"]
+    assert registry.get_sample_value("arq_jobs_ongoing") == data["ongoing"]
+    assert registry.get_sample_value("arq_queued_inprogress") == data["queued"]
